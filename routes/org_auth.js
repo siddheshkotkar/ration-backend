@@ -24,11 +24,8 @@ router.post("/login",async(req,res)=>{
         
         return res.status(400).send("organization is not registered");
     }else{
-        
-    const token = await jwt.sign({ id: Organization._id }, process.env.TOKEN_SECRET,{
-
+    const token = await jwt.sign({ id: userexits._id }, process.env.TOKEN_SECRET,{
         expiresIn:process.env.JWT_EXPIRE,
-
     });
 
     res.send({token});
@@ -47,6 +44,9 @@ router.post("/register",async(req,res)=>{
 		const emailExists = await Organization.findOne({ email:req.body.email });
 		if (emailExists) return res.status(400).send(" user  already exist");
 
+        if (!req.body.org_username || !req.body.org_password || !req.body.name || !req.body.place || !req.body.email) {
+            return res.status(400).json({err: "required data not provided"})
+        }
 
         
 		const newOrganization = new Organization({

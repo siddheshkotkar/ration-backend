@@ -32,7 +32,9 @@ const orgverify=async(req,res,next)=>{
         if(!authtoken){
             return next("Please enter the login access data");
         }const verify= await jwt.verify(authtoken,process.env.TOKEN_SECRET);
+        console.log(verify)
         req.user =await Organization.findById(verify.id);
+        console.log(req.user);
         next();
     
     

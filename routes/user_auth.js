@@ -25,7 +25,7 @@ router.post("/login",async(req,res)=>{
         return res.status(400).send("not-loggedin");
     }else{
         
-    const token = await jwt.sign({ id: User._id }, process.env.TOKEN_SECRET,{
+    const token = await jwt.sign({ id: userexits._id }, process.env.TOKEN_SECRET,{
 
         expiresIn:process.env.JWT_EXPIRE,
 

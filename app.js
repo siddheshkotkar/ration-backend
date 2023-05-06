@@ -16,18 +16,20 @@ mongoose.connect(
 ).then(()=>{
     console.log("DB done")
 })
-const { userverify } = require("./routes/jwtverify");
+const { userverify, orgverify } = require("./routes/jwtverify");
 
 
 const userAuth=require("./routes/user_auth");
 const orgAuth=require("./routes/org_auth");
 const userRoutes = require("./routes/user");
+const orgRoutes = require("./routes/organization");
+
 
 app.use("/userAuth", userAuth);
 app.use("/orgAuth", orgAuth);
 
 app.use("/user",userverify, userRoutes);
-// app.use("/or")
+app.use("/organization",orgverify,orgRoutes);
 
 
 //console.log("Done ")

@@ -214,3 +214,5 @@ router.delete("/events/:id/slots/:sid", async (req, res) => {
         return res.status(400).json({error: err.message})
     }
 })
+
+module.exports = router;
