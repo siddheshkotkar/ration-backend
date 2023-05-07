@@ -157,9 +157,11 @@ router.delete("/ration/:id", async (req, res) => {
 router.get("/events/:id/slots", async (req, res) => {
     try {
         const eventId = req.params.id
+        console.log(eventId)
         const slots = await Slots.find({
-            event: eventId
-        }).populate('rations.ration')
+                 event: eventId
+        })
+        .populate('rations.ration')
 
         return res.status(200).json(slots)
     }
@@ -172,7 +174,9 @@ router.get("/events/:id/slots", async (req, res) => {
 router.post("/events/:id/slots", async (req, res) => {
     try {
         const {start_time, end_time, rations, limit} = req.body;
+        const event=req.params.id
         const slot = new Slots({
+            event,
             start_time,
             end_time,
             rations,

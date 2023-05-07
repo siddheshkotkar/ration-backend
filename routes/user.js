@@ -26,7 +26,7 @@ router.get("/events/:id/slots", async (req, res) => {
     try {
         const eventId = req.params.id
         const slots = await Slots.find({
-            event: eventId
+            // event: eventId
         }).populate('rations.ration')
 
         return res.status(200).json(slots)
@@ -44,9 +44,10 @@ router.patch("/events/:id/slots/:sid", async (req, res) => {
         const slot = await Slots.findOne({
             _id: slot_id
         })
+       
         const currentTime = new Date();
         if (currentTime < slot.end_time && currentTime >= slot.start_time) {
-            if (slots.limit > 0) {
+            if (slot.limit > 0) {
                 await Slots.updateOne({
                     _id: slot_id,
                 },{ $inc: {
@@ -59,7 +60,15 @@ router.patch("/events/:id/slots/:sid", async (req, res) => {
                const bookedSlot= await newbookedslot.save();
                 res.send(bookedSlot).status(200)
             }
+            else
+            {
+                res.status(400).json({err:"Slot is full"});
+            }
             
+        }
+        else
+        {
+            res.status(400).json({err:"Slot is finished!"});
         }
         // const slots = await Slots.updateOne({})
     }catch(err){
@@ -76,19 +85,24 @@ router.post("/events/:id/slots/:sid/rations/:rid",async(req,res)=>{
     const ration = await Ration.findOne({
         _id: ration_id
     })
-
+    console.log(ration.stock);
     if (ration.stock >= quantity) {
+        
         const rationupdate=await Ration.updateOne({_id:ration_id},{
             $inc:{
                 stock:-quantity
             }
         })
         const insetbill=new DistributedRation({
-            user:User.id,
+            user:req.user.id,
             ration:ration_id,
             event:event_id,
             quantity:quantity
         })
+        const newDistration = await insetbill.save()
+        console.log(newDistration)
+        res.status(200).json(newDistration)
+        
     }
    
 })
