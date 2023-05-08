@@ -175,8 +175,9 @@ router.post("/events/:id/slots", async (req, res) => {
     try {
         const {start_time, end_time, rations, limit} = req.body;
         const event=req.params.id
+        console.log(new mongoose.Types.ObjectId(event))
         const slot = new Slots({
-            event,
+            event: new mongoose.Types.ObjectId(event),
             start_time,
             end_time,
             rations,
@@ -185,6 +186,7 @@ router.post("/events/:id/slots", async (req, res) => {
         const newslot = await slot.save();
         return res.status(200).json(newslot)
     } catch (err) {
+        console.log(err)
         return res.status(400).json({error: err.message})
     }
 })
@@ -218,5 +220,15 @@ router.delete("/events/:id/slots/:sid", async (req, res) => {
         return res.status(400).json({error: err.message})
     }
 })
+
+// //get all rations
+// router.get("/rations", async (req, res) => {
+//     try {
+//         const rations = await Ration.find({})
+//         return res.status(200).json(rations)
+//     } catch (err) {
+//         return res.status(400).json({error: err.message})
+//     }
+// })
 
 module.exports = router;

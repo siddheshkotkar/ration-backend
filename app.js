@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 require("dotenv/config");
-
+const cors = require("cors");
 const app = express(); 
 app.use(bodyParser.json({limit: '10mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
@@ -23,7 +23,13 @@ const userAuth=require("./routes/user_auth");
 const orgAuth=require("./routes/org_auth");
 const userRoutes = require("./routes/user");
 const orgRoutes = require("./routes/organization");
-
+const corsOption = {
+	credentials : true,
+	origin : [
+		"http://localhost:3000"
+	]
+};
+app.use(cors(corsOption));
 
 app.use("/userAuth", userAuth);
 app.use("/orgAuth", orgAuth);
